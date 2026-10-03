@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.16)
+set(PASSPORT_APP "tuner" CACHE STRING "Application: tuner or personal-card")
+set_property(CACHE PASSPORT_APP PROPERTY STRINGS tuner personal-card)
+if(NOT PASSPORT_APP STREQUAL "tuner" AND NOT PASSPORT_APP STREQUAL "personal-card")
+    message(FATAL_ERROR "Unknown PASSPORT_APP: ${PASSPORT_APP}")
+endif()
+# Set both defaults before ESP-IDF creates sdkconfig. Use separate build dirs.
+set(SDKCONFIG_DEFAULTS "${CMAKE_CURRENT_LIST_DIR}/sdkconfig.defaults;${CMAKE_CURRENT_LIST_DIR}/config/${PASSPORT_APP}.defaults")
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+idf_build_set_property(PASSPORT_APP "${PASSPORT_APP}")
+project(Passport-Works)
